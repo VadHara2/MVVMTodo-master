@@ -1,6 +1,7 @@
 package com.codinginflow.mvvmtodo.ui.tasks
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -26,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+private const val TAG = "TasksFragment"
 
 @AndroidEntryPoint
 class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClickListener{
@@ -68,6 +70,14 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
             val result = bundle.getInt("add_edit_result")
             viewModel.onAddEditResult(result)
         }
+        
+        setFragmentResultListener("delete_all_completed_request"){_, bundle->
+            val result = bundle.get("delete_all_completed_result")
+            Log.i(TAG, "onViewCreated: ${result.toString()}")
+            if (result != null) {
+                viewModel.onDeleteAllCompletedResult(result as List<Task>)
+            }
+        }
 
         viewModel.tasks.observe(viewLifecycleOwner, Observer {
             taskAdapter.submitList(it)
@@ -96,6 +106,12 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                     is TasksViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action = TasksFragmentDirections.actionGlobalDeleteAllCompletedDialogFragment()
                         findNavController().navigate(action)
+                    }
+                    is TasksViewModel.TaskEvent.ShowUndoDeleteTasksMessage -> {
+                        Snackbar.make(requireView(),"Completed tasks deleted", Snackbar.LENGTH_LONG)
+                                .setAction("UNDO"){
+                                    viewModel.onUndoAllDeletedClick(event.task)
+                                }.show()
                     }
                 }.exhaustive
             }

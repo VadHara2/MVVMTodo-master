@@ -19,6 +19,9 @@ interface TaskDao {
     @Query("SELECT * FROM task_table WHERE (completed != :hideCompleted OR completed = 0) AND name LIKE '%' || :searchQuery || '%' ORDER BY important DESC, created")
     fun getTasksSortedByDateCreated(searchQuery: String, hideCompleted: Boolean): Flow<List<Task>>
 
+    @Query("SELECT * FROM task_table WHERE completed = 1")
+    fun getCompletedTask():List<Task>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(task: Task)
 
