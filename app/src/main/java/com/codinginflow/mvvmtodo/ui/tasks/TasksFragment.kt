@@ -83,10 +83,10 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
         }
 
         setFragmentResultListener("delete_all_completed_request") { _, bundle ->
-            val result = bundle.get("delete_all_completed_result")
+            val result = bundle.get("delete_all_completed_result") as List<Task>
             Log.i(TAG, "onViewCreated: ${result.toString()}")
-            if (result != null) {
-                viewModel.onDeleteAllCompletedResult(result as List<Task>)
+            if (result.isNotEmpty()) {
+                viewModel.onDeleteAllCompletedResult(result )
             }
         }
 
@@ -100,29 +100,33 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
             viewModel.tasksEvent.collect { event ->
                 when (event) {
                     is TasksViewModel.TaskEvent.ShowUndoDeleteTaskMessage -> {
-                        Snackbar.make(requireView(), "Task deleted", Snackbar.LENGTH_LONG)
-                                .setAction("UNDO") {
+                        Snackbar.make(requireView(), "${getString(R.string.task_deleted)}", Snackbar.LENGTH_LONG)
+                                .setAction("${getString(R.string.undo)}") {
                                     viewModel.onUndoDeleteClick(event.task)
                                 }.show()
                     }
                     is TasksViewModel.TaskEvent.NavigateToAddTaskScreen -> {
-                        val action = TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(null, "New Task")
+                        val action = TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(null, "${getString(R.string.new_task)}")
                         findNavController().navigate(action)
                     }
                     is TasksViewModel.TaskEvent.NavigateToEditTaskScreen -> {
-                        val action = TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(event.task, "Edit Task")
+                        val action = TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(event.task, "${getString(R.string.edit_task)}")
                         findNavController().navigate(action)
                     }
                     is TasksViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
-                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
+                        if (event.msg == "Task added") {
+                            Snackbar.make(requireView(), "${getString(R.string.task_added)}", Snackbar.LENGTH_SHORT).show()
+                        } else {
+                            Snackbar.make(requireView(), "${getString(R.string.task_added)}", Snackbar.LENGTH_SHORT).show()
+                        }
                     }
                     is TasksViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action = TasksFragmentDirections.actionGlobalDeleteAllCompletedDialogFragment()
                         findNavController().navigate(action)
                     }
                     is TasksViewModel.TaskEvent.ShowUndoDeleteTasksMessage -> {
-                        Snackbar.make(requireView(), "Completed tasks deleted", Snackbar.LENGTH_LONG)
-                                .setAction("UNDO") {
+                        Snackbar.make(requireView(), "${getString(R.string.completed_tasks_deleted)}", Snackbar.LENGTH_LONG)
+                                .setAction("${getString(R.string.undo)}") {
                                     viewModel.onUndoAllDeletedClick(event.task)
                                 }.show()
                     }

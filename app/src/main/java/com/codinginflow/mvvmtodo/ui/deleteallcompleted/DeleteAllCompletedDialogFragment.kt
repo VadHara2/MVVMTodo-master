@@ -7,6 +7,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import com.codinginflow.mvvmtodo.R
 import com.codinginflow.mvvmtodo.data.Task
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,10 +18,10 @@ class DeleteAllCompletedDialogFragment: DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
             AlertDialog.Builder(requireContext())
-                    .setTitle("Confirm deletion")
-                    .setMessage("Do you really want to delete all completed tasks?")
-                    .setNegativeButton("Cancel", null)
-                    .setPositiveButton("Yes"){_,_ ->
+                    .setTitle("${getString(R.string.confirm_deletion)}")
+                    .setMessage("${getString(R.string.confirm_text)}")
+                    .setNegativeButton("${getString(R.string.cancel)}", null)
+                    .setPositiveButton("${getString(R.string.yes)}"){_,_ ->
                         viewModel.OnConfirmClick()
                     }
                     .create()

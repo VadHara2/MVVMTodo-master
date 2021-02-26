@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MVVMTodo</string>
+    <string name="task_name">Завдання</string>
+    <string name="important_task">Важлива задача</string>
+    <string name="date_created">Дата створення:</string>
+    <string name="search">Пошук</string>
+    <string name="sort">Сортувати</string>
+    <string name="sort_by_name">Сортувати за алфавітом</string>
+    <string name="sort_by_date_created">Сортувати по даті</string>
+    <string name="delete_all_completed">Видалити всі зроблені</string>
+    <string name="hide_completed">Приховати виконані</string>
+    <string name="confirm_deletion">Увага!</string>
+    <string name="confirm_text">Видійсно бажаєте видалити всі виконані завдання?</string>
+    <string name="cancel">Відміна</string>
+    <string name="yes">Так</string>
+    <string name="task_deleted">Завдання виделено</string>
+    <string name="undo">НАЗАД</string>
+    <string name="new_task">Нове Завдання</string>
+    <string name="edit_task">Редагувати Задачу</string>
+    <string name="completed_tasks_deleted">Виконані завдання видалені</string>
+    <string name="task_added">Задача додана</string>
+    <string name="task_updated">Завдання оновленно</string>
+
+</resources>
