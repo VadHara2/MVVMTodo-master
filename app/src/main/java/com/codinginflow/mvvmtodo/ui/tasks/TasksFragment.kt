@@ -27,10 +27,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+
 private const val TAG = "TasksFragment"
 
 @AndroidEntryPoint
-class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClickListener{
+class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClickListener {
 
     private val viewModel: TasksViewModel by viewModels()
 
@@ -50,14 +51,14 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                 setHasFixedSize(true)
             }
 
-            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
                 override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                     return false
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    val task = taskAdapter.currentList[viewHolder.adapterPosition]
-                    viewModel.onTaskSwiped(task)
+                    val taskItem = taskAdapter.currentList[viewHolder.adapterPosition] as AdapterItem.TaskItem
+                    viewModel.onTaskSwiped(taskItem.task)
                 }
             }).attachToRecyclerView(recyclerViewTasks)
 
@@ -66,12 +67,12 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
             }
         }
 
-        setFragmentResultListener("add_edit_request"){_, bundle->
+        setFragmentResultListener("add_edit_request") { _, bundle ->
             val result = bundle.getInt("add_edit_result")
             viewModel.onAddEditResult(result)
         }
-        
-        setFragmentResultListener("delete_all_completed_request"){_, bundle->
+
+        setFragmentResultListener("delete_all_completed_request") { _, bundle ->
             val result = bundle.get("delete_all_completed_result")
             Log.i(TAG, "onViewCreated: ${result.toString()}")
             if (result != null) {
@@ -80,15 +81,17 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
         }
 
         viewModel.tasks.observe(viewLifecycleOwner, Observer {
-            taskAdapter.submitList(it)
+            viewLifecycleOwner.lifecycleScope.launch {
+                taskAdapter.submitListWithDate(it, viewModel.preferencesFlow.first().sortOrder)
+            }
         })
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.tasksEvent.collect{event ->
-                when(event){
-                    is TasksViewModel.TaskEvent.ShowUndoDeleteTaskMessage ->{
-                        Snackbar.make(requireView(),"Task deleted", Snackbar.LENGTH_LONG)
-                                .setAction("UNDO"){
+            viewModel.tasksEvent.collect { event ->
+                when (event) {
+                    is TasksViewModel.TaskEvent.ShowUndoDeleteTaskMessage -> {
+                        Snackbar.make(requireView(), "Task deleted", Snackbar.LENGTH_LONG)
+                                .setAction("UNDO") {
                                     viewModel.onUndoDeleteClick(event.task)
                                 }.show()
                     }
@@ -101,15 +104,15 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                         findNavController().navigate(action)
                     }
                     is TasksViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
-                        Snackbar.make(requireView(),event.msg,Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
                     }
                     is TasksViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action = TasksFragmentDirections.actionGlobalDeleteAllCompletedDialogFragment()
                         findNavController().navigate(action)
                     }
                     is TasksViewModel.TaskEvent.ShowUndoDeleteTasksMessage -> {
-                        Snackbar.make(requireView(),"Completed tasks deleted", Snackbar.LENGTH_LONG)
-                                .setAction("UNDO"){
+                        Snackbar.make(requireView(), "Completed tasks deleted", Snackbar.LENGTH_LONG)
+                                .setAction("UNDO") {
                                     viewModel.onUndoAllDeletedClick(event.task)
                                 }.show()
                     }
@@ -136,7 +139,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
         searchView = searchItem.actionView as SearchView
 
         val pendingQuery = viewModel.searchQuery.value
-        if(pendingQuery != null && pendingQuery.isNotEmpty()){
+        if (pendingQuery != null && pendingQuery.isNotEmpty()) {
             searchItem.expandActionView()
             searchView.setQuery(pendingQuery, false)
         }
@@ -152,21 +155,21 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
+        return when (item.itemId) {
             R.id.action_sort_by_name -> {
                 viewModel.onSortOrderSelected(SortOrder.BY_NAME)
                 true
             }
-            R.id.action_sort_by_date_created ->{
+            R.id.action_sort_by_date_created -> {
                 viewModel.onSortOrderSelected(SortOrder.BY_DATE)
                 true
             }
-            R.id.action_hide_completed_tasks ->{
+            R.id.action_hide_completed_tasks -> {
                 item.isChecked = !item.isChecked
                 viewModel.onHideCompletedClick(item.isChecked)
                 true
             }
-            R.id.action_delete_all_completed_tasks->{
+            R.id.action_delete_all_completed_tasks -> {
                 viewModel.onDeleteAllCompletedClick()
                 true
             }
