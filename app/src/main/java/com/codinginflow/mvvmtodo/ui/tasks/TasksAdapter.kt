@@ -82,6 +82,7 @@ class TasksAdapter(private val listener: OnItemClickListener) : ListAdapter<Adap
     inner class TasksViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
+
             binding.apply {
                 root.setOnClickListener {
                     val position = adapterPosition
@@ -133,10 +134,8 @@ sealed class AdapterItem {
     }
 
     data class Date(val task: Task) : AdapterItem() {
-        override val id = task.created
+        override val id = Long.MIN_VALUE
     }
 
     abstract val id: Long
-
-
 }

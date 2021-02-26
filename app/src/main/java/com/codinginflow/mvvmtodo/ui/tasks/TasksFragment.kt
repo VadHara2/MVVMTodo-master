@@ -52,15 +52,25 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
             }
 
             ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+
                 override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                     return false
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    val taskItem = taskAdapter.currentList[viewHolder.adapterPosition] as AdapterItem.TaskItem
-                    viewModel.onTaskSwiped(taskItem.task)
+                    val adapterItem = taskAdapter.currentList[viewHolder.adapterPosition]
+                    if (adapterItem.id != Long.MIN_VALUE) {
+                        val taskItem = adapterItem as AdapterItem.TaskItem
+                        viewModel.onTaskSwiped(taskItem.task)
+                    }
+                }
+
+                override fun getSwipeDirs(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+                    if (viewHolder is TasksAdapter.DateViewHolder) return 0
+                    return super.getSwipeDirs(recyclerView, viewHolder)
                 }
             }).attachToRecyclerView(recyclerViewTasks)
+
 
             fabAddTask.setOnClickListener {
                 viewModel.onAddNewTaskClick()
