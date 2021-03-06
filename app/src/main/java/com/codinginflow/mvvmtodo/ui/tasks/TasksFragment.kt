@@ -117,7 +117,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                         if (event.msg == "Task added") {
                             Snackbar.make(requireView(), "${getString(R.string.task_added)}", Snackbar.LENGTH_SHORT).show()
                         } else {
-                            Snackbar.make(requireView(), "${getString(R.string.task_added)}", Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(requireView(), "${getString(R.string.task_updated)}", Snackbar.LENGTH_SHORT).show()
                         }
                     }
                     is TasksViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
