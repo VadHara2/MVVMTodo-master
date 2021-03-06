@@ -4,7 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/secondaryColor</item>
         <item name="colorPrimaryVariant">@color/secondaryLightColor</item>
-        <item name="colorOnPrimary">@color/secondaryDarkColor</item>
+        <item name="colorOnPrimary">@color/primaryColor</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/primaryColor</item>
         <item name="colorSecondaryVariant">@color/primaryDarkColor</item>

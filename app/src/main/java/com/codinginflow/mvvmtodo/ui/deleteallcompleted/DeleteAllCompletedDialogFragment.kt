@@ -17,7 +17,7 @@ class DeleteAllCompletedDialogFragment : DialogFragment() {
     private val viewModel: DeleteAllCompletedViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
-        AlertDialog.Builder(requireContext())
+        AlertDialog.Builder(requireContext(), 4)
             .setTitle("${getString(R.string.confirm_deletion)}")
             .setMessage("${getString(R.string.confirm_text)}")
             .setNegativeButton("${getString(R.string.cancel)}", null)
