@@ -13,8 +13,6 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/roboto_condensed_regular</item>
-
-        <item name="android:navigationBarColor">@color/primaryLightColor</item>
     </style>
 
     <style name="TaskItemName" parent="Theme.MVVMTodo">

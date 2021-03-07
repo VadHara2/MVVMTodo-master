@@ -36,4 +36,8 @@
         android:id="@+id/deleteAllCompletedDialogFragment"
         android:name="com.codinginflow.mvvmtodo.ui.deleteallcompleted.DeleteAllCompletedDialogFragment"
         android:label="DeleteAllCompletedDialogFragment" /><action android:id="@+id/action_global_deleteAllCompletedDialogFragment" app:destination="@id/deleteAllCompletedDialogFragment"/>
+    <dialog
+        android:id="@+id/timePickerDialog"
+        android:name="com.codinginflow.mvvmtodo.ui.timepicker.TimePickerDialog"
+        android:label="TimePickerDialog" /><action android:id="@+id/action_global_timePickerDialog" app:destination="@id/timePickerDialog"/>
 </navigation>

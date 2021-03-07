@@ -20,4 +20,5 @@
     <string name="completed_tasks_deleted">Completed tasks deleted</string>
     <string name="task_added">Task added</string>
     <string name="task_updated">Task updated</string>
+    <string name="set_reminder">Set reminder</string>
 </resources>
