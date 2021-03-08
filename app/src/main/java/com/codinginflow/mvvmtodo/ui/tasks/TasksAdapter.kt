@@ -112,7 +112,7 @@ class TasksAdapter(private val listener: OnItemClickListener) : ListAdapter<Adap
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<AdapterItem>() {
+    private class DiffCallback : DiffUtil.ItemCallback<AdapterItem>() {
         override fun areItemsTheSame(oldItem: AdapterItem, newItem: AdapterItem) =
                 oldItem.id == newItem.id
 
