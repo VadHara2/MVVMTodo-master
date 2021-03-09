@@ -1,43 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.addedittask.AddEditTaskFragment"
-    android:padding="8dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <data>
+        <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
+        <variable
+            name="viewmodel"
+            type="com.codinginflow.mvvmtodo.ui.addedittask.AddEditTaskViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        tools:context=".ui.addedittask.AddEditTaskFragment">
 
-        <EditText
-            android:id="@+id/edit_text_task_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/task_name" />
+            android:orientation="vertical">
 
-        <CheckBox
-            android:id="@+id/check_box_important"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/important_task" />
+            <EditText
+                android:id="@+id/edit_text_task_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/task_name" />
 
-        <TextView
-            android:id="@+id/text_view_date_created"
+            <CheckBox
+                android:id="@+id/check_box_important"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/important_task" />
+
+            <TextView
+                android:visibility="@{viewmodel.liveImportance ? View.VISIBLE : View.GONE}"
+                android:id="@+id/text_view_reminder_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewmodel.liveReminder}"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/text_view_date_created"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date_created" />
+
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_save_task"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/date_created" />
-
-    </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_save_task"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="8dp"
-        app:srcCompat="@drawable/ic_check_mark"
-        app:backgroundTint="?colorPrimary"/>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            android:layout_gravity="bottom|end"
+            android:layout_margin="8dp"
+            app:backgroundTint="?colorPrimary"
+            app:srcCompat="@drawable/ic_check_mark" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

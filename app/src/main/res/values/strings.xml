@@ -22,5 +22,6 @@
     <string name="task_updated">Task updated</string>
     <string name="set_reminder">Set reminder</string>
     <string name="remind">Remind</string>
+    <string name="reminder_time">Reminder time:</string>
 
 </resources>

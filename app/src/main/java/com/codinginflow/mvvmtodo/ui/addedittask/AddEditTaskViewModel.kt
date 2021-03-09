@@ -2,6 +2,7 @@ package com.codinginflow.mvvmtodo.ui.addedittask
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,11 +13,13 @@ import com.codinginflow.mvvmtodo.ui.EDIT_TASK_RESULT_OK
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 
 class AddEditTaskViewModel @ViewModelInject constructor(
         private val taskDao: TaskDao,
         @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
+
     val task = state.get<Task>("task")
     var taskName = state.get<String>("taskName") ?: task?.name ?: ""
         set(value) {
@@ -29,6 +32,14 @@ class AddEditTaskViewModel @ViewModelInject constructor(
             field = value
             state.set("taskImportance", value)
         }
+    val liveImportance = MutableLiveData<Boolean>(taskImportance)
+
+    var taskReminder = state.get<Long>("taskReminder") ?: task?.reminder ?: Long.MIN_VALUE
+        set(value) {
+            field = value
+            state.set("taskReminder", value)
+        }
+    val liveReminder = MutableLiveData<String>()
 
     private val addEditTaskEventChannel = Channel<AddEditTaskEvent>()
     val addEditTaskEvent =addEditTaskEventChannel.receiveAsFlow()
@@ -40,10 +51,10 @@ class AddEditTaskViewModel @ViewModelInject constructor(
         }
 
         if (task != null) {
-            val updatedTask = task.copy(name = taskName, important = taskImportance)
+            val updatedTask = task.copy(name = taskName, important = taskImportance, reminder = taskReminder)
             updateTask(updatedTask)
         } else {
-            val newTask = Task(name = taskName, important = taskImportance)
+            val newTask = Task(name = taskName, important = taskImportance, reminder = taskReminder)
             createTask(newTask)
         }
     }

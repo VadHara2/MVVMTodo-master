@@ -4,11 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import com.codinginflow.mvvmtodo.R
-import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 
 private const val TAG = "TimePickerViewModel"
@@ -48,7 +44,7 @@ class TimePickerViewModel : ViewModel() {
             )
             formattedDatesList.set(
                 i,
-                SimpleDateFormat("dd MMMM").format((System.currentTimeMillis() + (i * 86400000).toLong()))
+                SimpleDateFormat("d MMMM").format((System.currentTimeMillis() + (i * 86400000).toLong()))
             )
         }
 

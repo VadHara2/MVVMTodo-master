@@ -23,5 +23,6 @@
     <string name="task_updated">Завдання оновленно</string>
     <string name="set_reminder">Встановити нагадуваня</string>
     <string name="remind">Нагадати</string>
+    <string name="reminder_time">Reminder time:</string>
 
 </resources>
