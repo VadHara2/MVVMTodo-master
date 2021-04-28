@@ -24,8 +24,8 @@ import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-private val ITEM_VIEW_TYPE_DATE = 0
-private val ITEM_VIEW_TYPE_TASK = 1
+private const val ITEM_VIEW_TYPE_DATE = 0
+private const val ITEM_VIEW_TYPE_TASK = 1
 private const val TAG = "TasksAdapter"
 
 class TasksAdapter(private val listener: OnItemClickListener) : ListAdapter<AdapterItem, RecyclerView.ViewHolder>(DiffCallback()) {
